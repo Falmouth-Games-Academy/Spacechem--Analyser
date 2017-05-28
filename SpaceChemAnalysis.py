@@ -8,6 +8,8 @@ TEMPLATE_FOLDER="templates"
 TEST_IMAGE_NAME="Reactor - A Brief History Of SpaceChem.jpg"
 #Threshold
 THRESHOLD=0.8
+#Image Test Area
+IMAGE_TEST_AREA=[110,0,900,640]
 
 def main():
     img = cv2.imread(TEST_IMAGE_NAME)
@@ -27,8 +29,9 @@ def main():
         #check to see if the result is in a certain threshold
         loc = np.where( res >= THRESHOLD)
         for pt in zip(*loc[::-1]):
-            #draw rectanges for each match
-            cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0,0,255),2)
+            #draw rectanges for each match that is in the test area
+            if ((pt[0]>IMAGE_TEST_AREA[0]) and (pt[0]<IMAGE_TEST_AREA[2]) and (pt[1]>IMAGE_TEST_AREA[1]) and (pt[1]<IMAGE_TEST_AREA[3])):
+                cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0,0,255),2)
 
     #show image in a window
     cv2.imshow('image',img)
