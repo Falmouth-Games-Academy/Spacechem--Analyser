@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import os
+from github import Github
 
 #template folder
 TEMPLATE_FOLDER="templates"
@@ -14,6 +15,10 @@ IMAGE_TEST_AREA=[110,0,900,640]
 #CSV filename
 CSV_FILENAME="spacechem.csv"
 
+GIT_ACCESS_TOKEN="8a5c954f77a2a8c92fb753e9cbcfd305bec9bdfa"
+ORGANIZATION_NAME="Falmouth University Games Academy"
+REPO_NAME="comp110-worksheets"
+
 def readTemplateFiles(templateDirectory):
     templateDict={}
     for currentFile in os.listdir( templateDirectory ):
@@ -23,7 +28,16 @@ def readTemplateFiles(templateDirectory):
 
     return templateDict
 
+def getTestImagesFromRepo():
+    g = Github(GIT_ACCESS_TOKEN)
+    for org in g.get_user().get_orgs():
+        if (org.name==ORGANIZATION_NAME):
+            for fork in org.get_repo(REPO_NAME).get_forks():
+                print fork.id
+
+
 def main():
+    getTestImagesFromRepo()
     CSVString=""
     img = cv2.imread(TEST_IMAGE_NAME)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
